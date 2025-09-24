@@ -1,0 +1,12 @@
+/dist/flag/*.txt
+*.log
+*.tpl
+*.bak
+*.pdb
+*.dll
+.vs
+bin/
+obj/
+addons/
+Proj#ignore/
+trunk/Tools/XDesignerCRM/XDesign.dat
