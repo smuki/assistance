@@ -401,6 +401,9 @@ namespace WinFormsApp1
                         Environment.Text = v.GetValue("Url");
                     }
                     SetEnable(false);
+                    lbl_msg.ForeColor = Color.Green;
+                    lbl_msg.Text = "已经读取新的配置";
+                    lbl_msg.Visible = true;
                 }
                 else
                 {
@@ -419,7 +422,17 @@ namespace WinFormsApp1
                         JSONObject v = jSONObject.GetJSONObject(corporationId.Text);
                         corpName.Text = v.GetValue("Name");
                     }
+                    else
+                    {
+                        lbl_msg.ForeColor = Color.Red;
+                        lbl_msg.Text = "找不到配置";
+                        lbl_msg.Visible = true;
+                    }
                 }
+                timer1.Stop();
+                timer1.Interval = 10000;
+                timer1.Start();
+
             }
         }
         private void SetEnable(bool Enabled)
