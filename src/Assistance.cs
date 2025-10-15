@@ -515,5 +515,31 @@ namespace WinFormsApp1
         {
 
         }
+
+        private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();  // 退出应用程序
+        }
+
+        private void frmTools_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;  // 取消关闭窗体
+                this.Hide();  // 隐藏窗体
+                this.notifyIcon1.Visible = true;  // 显示托盘图标
+            }
+        }
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Show();  // 显示窗体
+            this.WindowState = FormWindowState.Normal;  // 恢复窗体正常大小
+            this.notifyIcon1.Visible = true;  // 隐藏托盘图标
+        }
+
+        private void label1_DoubleClick(object sender, EventArgs e)
+        {
+            Application.Exit();  // 退出应用程序
+        }
     }
 }

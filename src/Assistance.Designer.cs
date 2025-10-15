@@ -54,6 +54,11 @@
             button1 = new Button();
             UserOpen = new Button();
             corpName = new TextBox();
+            notifyIcon1 = new NotifyIcon(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            ShowToolStripMenuItem = new ToolStripMenuItem();
+            QuitToolStripMenuItem = new ToolStripMenuItem();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // Fetch
@@ -137,6 +142,7 @@
             label1.Size = new Size(46, 24);
             label1.TabIndex = 9;
             label1.Text = "环境";
+            label1.DoubleClick += label1_DoubleClick;
             // 
             // label2
             // 
@@ -291,6 +297,33 @@
             corpName.Size = new Size(355, 30);
             corpName.TabIndex = 27;
             // 
+            // notifyIcon1
+            // 
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.Visible = true;
+            notifyIcon1.MouseClick += notifyIcon1_MouseClick;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(24, 24);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { ShowToolStripMenuItem, QuitToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(117, 64);
+            // 
+            // ShowToolStripMenuItem
+            // 
+            ShowToolStripMenuItem.Name = "ShowToolStripMenuItem";
+            ShowToolStripMenuItem.Size = new Size(116, 30);
+            ShowToolStripMenuItem.Text = "显示";
+            // 
+            // QuitToolStripMenuItem
+            // 
+            QuitToolStripMenuItem.Name = "QuitToolStripMenuItem";
+            QuitToolStripMenuItem.Size = new Size(116, 30);
+            QuitToolStripMenuItem.Text = "退出";
+            QuitToolStripMenuItem.Click += QuitToolStripMenuItem_Click;
+            // 
             // frmTools
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -327,6 +360,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "授权链接";
             TopMost = true;
+            FormClosing += frmTools_FormClosing;
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -357,5 +392,9 @@
         private Button button1;
         private Button UserOpen;
         private TextBox corpName;
+        private NotifyIcon notifyIcon1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem ShowToolStripMenuItem;
+        private ToolStripMenuItem QuitToolStripMenuItem;
     }
 }
