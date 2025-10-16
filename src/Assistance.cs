@@ -166,6 +166,14 @@ namespace WinFormsApp1
         }
         private void Parse()
         {
+            if (sAppId.Text.Contains("{") && sAppId.Text.Contains("}") && sAppId.Text.Contains("\""))
+            {
+                JSONObject t=new JSONObject(sAppId.Text);
+                
+                sAppId.Text = t.GetValue("appKey");
+                sAppSecret.Text = t.GetValue("appSecurity");
+            }
+
             if (sAppId.Text.Contains("\r") || sAppId.Text.Contains("\n"))
             {
                 string t = sAppId.Text.Replace("\r", "\n");
