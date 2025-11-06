@@ -45,12 +45,18 @@ namespace WinFormsApp1
                 string text6 = "?accessToken=" + g_AccessToken + "&staffBy=id&pathType=name";
                 string adminPath = "/api/openapi/v1/roledefs/$" + Util.UrlEncode(corporationId.Text) + ":admin" + text6;
                 string staffId = "";
-                foreach (JSONObject jSONObject5 in new JSONObject(new GetHttpHelper(baseUrl, adminPath).GetResult()).GetJSONObject("value").GetJSONArray("contents").JSONObjects)
+                var adminRole = new GetHttpHelper(baseUrl, adminPath).GetResult();
+
+                foreach (JSONObject jSONObject5 in new JSONObject(adminRole).GetJSONObject("value").GetJSONArray("contents").JSONObjects)
                 {
                     foreach (string name in jSONObject5.GetJSONArray("staffs").Names)
                     {
                         staffId = name;
                     }
+                }
+                if (string.IsNullOrEmpty(staffId))
+                {
+                    staffId=UserId.Text;
                 }
 
                 adminPath = "/api/openapi/v1.1/provisional/getProvisionalAuth?accessToken=" + g_AccessToken;
@@ -68,19 +74,32 @@ namespace WinFormsApp1
                 if (!string.IsNullOrEmpty(vv) && vv.Length > 10)
                 {
                     int p1 = vv.IndexOf("accessToken=");
-                    int p2 = vv.IndexOf("&ekbCorpId", p1);
-                    if (p1 > 0 && p2 > 0 && p2 > p1)
+                    if (p1 < 0)
                     {
-                        accessToken.Text = vv.Substring(p1 + 12, p2 - p1 - 12);
+                        lbl_msg.ForeColor = Color.Red;
+                        lbl_msg.Text = vv;
+                        lbl_msg.Visible = true;
+
+                        timer1.Stop();
+                        timer1.Interval = 10000;
+                        timer1.Start();
                     }
-                    SetEnable(true);
+                    else
+                    {
+                        int p2 = vv.IndexOf("&ekbCorpId", p1);
+                        if (p1 > 0 && p2 > 0 && p2 > p1)
+                        {
+                            accessToken.Text = vv.Substring(p1 + 12, p2 - p1 - 12);
+                        }
+                        SetEnable(true);
 
-                    adminPath = "api/v1/organization/corporations/info?sensitiveWords=true&corpId=" + Util.UrlEncode(corporationId.Text) + "&accessToken=" + accessToken.Text;
-                    var corpo = new GetHttpHelper(baseUrl, adminPath).GetResult();
-                    var corpSONObject = new JSONObject(corpo);
-                    corpName.Text = corpSONObject.GetJSONObject("value").GetValue("name");
+                        adminPath = "api/v1/organization/corporations/info?sensitiveWords=true&corpId=" + Util.UrlEncode(corporationId.Text) + "&accessToken=" + accessToken.Text;
+                        var corpo = new GetHttpHelper(baseUrl, adminPath).GetResult();
+                        var corpSONObject = new JSONObject(corpo);
+                        corpName.Text = corpSONObject.GetJSONObject("value").GetValue("name");
 
-                    return vv;
+                        return vv;
+                    }
                 }
 
             }
@@ -139,6 +158,7 @@ namespace WinFormsApp1
                     item.SetValue("Key", sAppId.Text);
                     item.SetValue("Security", sAppSecret.Text);
                     item.SetValue("Name", corpName.Text);
+                    item.SetValue("User", UserId.Text);
 
                     jSONObject.SetValue(corporationId.Text, item);
                     Util.WriteContents(fileName, jSONObject.ToString(), false);
@@ -404,6 +424,8 @@ namespace WinFormsApp1
                     sAppId.Text = v.GetValue("Key");
                     sAppSecret.Text = v.GetValue("Security");
                     corpName.Text = v.GetValue("Name");
+                    UserId.Text = v.GetValue("User");
+
                     if (!string.IsNullOrEmpty(v.GetValue("Url")))
                     {
                         Environment.Text = v.GetValue("Url");
