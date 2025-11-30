@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>14000.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="14000.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volte.Data.Dapper" Version="1.8.74" />

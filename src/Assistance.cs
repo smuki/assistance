@@ -32,7 +32,6 @@ namespace WinFormsApp1
             JSONObject jSONObject = new JSONObject();
             jSONObject.SetValue("appKey", sAppId.Text);
             jSONObject.SetValue("appSecurity", sAppSecret.Text);
-            string link = "";
             string result = new PostHttpHelper(baseUrl, getAccessToken, jSONObject.ToString()).GetResult();
 
 
