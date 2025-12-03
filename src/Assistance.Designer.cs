@@ -221,6 +221,7 @@
             // 
             TxtSQL.Location = new Point(42, 343);
             TxtSQL.Margin = new Padding(5, 4, 5, 4);
+            TxtSQL.MaxLength = 327670;
             TxtSQL.Multiline = true;
             TxtSQL.Name = "TxtSQL";
             TxtSQL.Size = new Size(838, 60);
@@ -336,7 +337,7 @@
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(944, 296);
+            ClientSize = new Size(944, 288);
             Controls.Add(corpName);
             Controls.Add(UserOpen);
             Controls.Add(button1);

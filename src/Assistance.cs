@@ -612,9 +612,13 @@ namespace WinFormsApp1
 
             string fileName = "cache.json";
             string setting = "{}";
-            using (StreamReader sr = new StreamReader(fileName))
+
+            if (File.Exists(fileName))
             {
-                setting = sr.ReadToEnd();
+                using (StreamReader sr = new StreamReader(fileName))
+                {
+                    setting = sr.ReadToEnd();
+                }
             }
             JSONObject jSONObject = new JSONObject(setting);
             jSONObject.SetValue(key, true);
