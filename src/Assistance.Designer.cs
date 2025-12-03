@@ -58,6 +58,7 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             ShowToolStripMenuItem = new ToolStripMenuItem();
             QuitToolStripMenuItem = new ToolStripMenuItem();
+            timer2 = new System.Windows.Forms.Timer(components);
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -173,6 +174,7 @@
             label4.Size = new Size(64, 24);
             label4.TabIndex = 12;
             label4.Text = "用户名";
+            label4.Click += label4_Click;
             // 
             // label5
             // 
@@ -324,6 +326,12 @@
             QuitToolStripMenuItem.Text = "退出";
             QuitToolStripMenuItem.Click += QuitToolStripMenuItem_Click;
             // 
+            // timer2
+            // 
+            timer2.Enabled = true;
+            timer2.Interval = 600000;
+            timer2.Tick += timer2_Tick;
+            // 
             // frmTools
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -361,6 +369,7 @@
             Text = "授权链接";
             TopMost = true;
             FormClosing += frmTools_FormClosing;
+            Load += frmTools_Load;
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -396,5 +405,6 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem ShowToolStripMenuItem;
         private ToolStripMenuItem QuitToolStripMenuItem;
+        private System.Windows.Forms.Timer timer2;
     }
 }
