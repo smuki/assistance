@@ -1,22 +1,9 @@
 ﻿using Assistance;
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.Win32;
 using System.ComponentModel;
-using System.Data.Common;
 using System.Diagnostics;
-using System.Net;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Volte.Data.Dapper;
 using Volte.Data.Json;
-using Volte.Data.SqlKata;
 using Volte.Utils;
-using static System.Windows.Forms.LinkLabel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace WinFormsApp1
 {
