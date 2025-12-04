@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>14000.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="14000.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volte.Data.Dapper" Version="1.8.74" />
+    <PackageReference Include="Volte.Data.Json" Version="1.9.7" />
+  </ItemGroup>
+
+</Project>
