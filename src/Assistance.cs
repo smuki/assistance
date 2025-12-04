@@ -603,6 +603,7 @@ namespace WinFormsApp1
         }
         public bool isRunning = false;
         public bool useAIComment = false;
+        public string Assignees = "";
         public bool load = false;
         public Dictionary<string, bool> cache = new();
 
@@ -736,7 +737,7 @@ namespace WinFormsApp1
 
         private void processIssues(JSONArray issues)
         {
-
+            var _assignees = Assignees.Split(',');
             foreach (var issue in issues.JSONObjects)
             {
                 string id = issue.GetValue("id");
@@ -745,50 +746,53 @@ namespace WinFormsApp1
                 string description = issue.GetJSONObject("fields").GetValue("description");
                 string assignee = issue.GetJSONObject("fields").Attr("assignee.displayName");
 
-                string url = "/rest/api/2/issue/" + key + "?expand=changelog";
-                var responseBody = new NewGetHttpHelper("https://jira.hosecloud.com", url, "Basic eWp5OlN1bnJpc2UxMjM0NTY3OA==").GetResult();
-                bool bHasAIComment = false;
-                JSONObject json = new JSONObject(responseBody);
-
-                JSONObject fields = json.GetJSONObject("fields");
-                JSONObject comment = fields.GetJSONObject("comment");
-
-                JSONArray comments = comment.GetJSONArray("comments");
-
-                foreach (var tComment in comments.JSONObjects)
+                if (!cache.ContainsKey(key))
                 {
-                    var body = tComment.GetValue("body");
-                    if (!string.IsNullOrEmpty(body) && body.Contains(AI_COMMENT_FLAG))
-                    {
-                        bHasAIComment = true;
-                    }
-                }
-                JSONObject changelog = json.GetJSONObject("changelog");
-                if (changelog != null)
-                {
-                    JSONArray histories = changelog.GetJSONArray("histories");
+                    string url = "/rest/api/2/issue/" + key + "?expand=changelog";
+                    var responseBody = new NewGetHttpHelper("https://jira.hosecloud.com", url, "Basic eWp5OlN1bnJpc2UxMjM0NTY3OA==").GetResult();
+                    bool bHasAIComment = false;
+                    JSONObject json = new JSONObject(responseBody);
 
-                    foreach (var history in histories.JSONObjects)
+                    JSONObject fields = json.GetJSONObject("fields");
+                    JSONObject comment = fields.GetJSONObject("comment");
+
+                    JSONArray comments = comment.GetJSONArray("comments");
+
+                    foreach (var tComment in comments.JSONObjects)
                     {
-                        JSONArray changeItem = history.GetJSONArray("items");
-                        foreach (var tcommm in changeItem.JSONObjects)
+                        var body = tComment.GetValue("body");
+                        if (!string.IsNullOrEmpty(body) && body.Contains(AI_COMMENT_FLAG))
                         {
-                            string field = tcommm.GetValue("field");
-                            string from = tcommm.GetValue("from");
-                            if (field == "Comment" && !string.IsNullOrEmpty(from) && from.Contains(AI_COMMENT_FLAG))
-                            {
-                                bHasAIComment = true;
-                            }
+                            bHasAIComment = true;
                         }
                     }
-                    if (!bHasAIComment && !cache.ContainsKey(key) && (assignee == "袁锦原" || assignee == "潘威" || assignee == "徐凯"))
+                    JSONObject changelog = json.GetJSONObject("changelog");
+                    if (changelog != null)
                     {
-                        string sAIComment = AskAI(description);
-                        JSONObject ai = new JSONObject(sAIComment);
-                        string answer = ai.GetValue("answer");
-                        if (!string.IsNullOrEmpty(answer))
+                        JSONArray histories = changelog.GetJSONArray("histories");
+
+                        foreach (var history in histories.JSONObjects)
                         {
-                            AddAIComment(key, answer);
+                            JSONArray changeItem = history.GetJSONArray("items");
+                            foreach (var tcommm in changeItem.JSONObjects)
+                            {
+                                string field = tcommm.GetValue("field");
+                                string from = tcommm.GetValue("from");
+                                if (field == "Comment" && !string.IsNullOrEmpty(from) && from.Contains(AI_COMMENT_FLAG))
+                                {
+                                    bHasAIComment = true;
+                                }
+                            }
+                        }
+                        if (!bHasAIComment && !cache.ContainsKey(key) && (_assignees.Contains(assignee)))
+                        {
+                            string sAIComment = AskAI(description);
+                            JSONObject ai = new JSONObject(sAIComment);
+                            string answer = ai.GetValue("answer");
+                            if (!string.IsNullOrEmpty(answer))
+                            {
+                                AddAIComment(key, answer);
+                            }
                         }
                     }
                 }
@@ -823,6 +827,7 @@ namespace WinFormsApp1
 
                 JSONObject jSONObject = new JSONObject(setting);
                 useAIComment = jSONObject.GetBoolean("AI_COMMENT");
+                Assignees = jSONObject.GetValue("Assignees");
             }
             WriteCache("useAIComment_" + useAIComment);
         }
